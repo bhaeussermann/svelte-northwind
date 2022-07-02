@@ -1,9 +1,16 @@
 <script lang="ts">
-  import Employees from './pages/Employees.svelte'
+  import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
+  import Employees from './pages/Employees.svelte';
 </script>
 
 <main>
-  <h1>Northwind</h1>
+  <TopAppBar variant="static">
+    <Row>
+      <Section>
+        <Title>Northwind Manager</Title>
+      </Section>
+    </Row>
+  </TopAppBar>
 
   <Employees />
 </main>
@@ -15,8 +22,6 @@
   }
 
   main {
-    text-align: center;
     padding: 1em;
-    margin: 0 auto;
   }
 </style>
