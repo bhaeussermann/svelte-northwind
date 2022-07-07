@@ -10,10 +10,12 @@
   },
   "devDependencies": {
     "@smui/data-table": "^6.0.0-beta.16",
+    "@smui/icon-button": "^6.0.0-beta.16",
     "@smui/linear-progress": "^6.0.0-beta.16",
     "@smui/top-app-bar": "^6.0.0-beta.16",
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
+    "material-icons": "^1.11.4",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
     "tslib": "^2.3.1",
