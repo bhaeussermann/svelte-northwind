@@ -1,19 +1,28 @@
 <script lang="ts">
+  import { Route, Router } from 'svelte-routing';
   import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
-  import Employees from './pages/Employees.svelte';
+  import Employees from './pages/Employees/Employees.svelte';
+  import ListEmployees from './pages/Employees/ListEmployees.svelte';
+  import NotFound from './pages/NotFound.svelte';
+
+  export let url = '';
 </script>
 
-<main>
-  <TopAppBar variant="static">
-    <Row>
-      <Section>
-        <Title>Northwind Manager</Title>
-      </Section>
-    </Row>
-  </TopAppBar>
+<Router {url}>
+  <main>
+    <TopAppBar variant="static">
+      <Row>
+        <Section>
+          <Title>Northwind Manager</Title>
+        </Section>
+      </Row>
+    </TopAppBar>
 
-  <Employees />
-</main>
+    <Route path="/" component={ListEmployees} />
+    <Route path="/employees/*" component={Employees} />
+    <Route component={NotFound} />
+  </main>
+</Router>
 
 <style>
   :root {

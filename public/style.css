@@ -1,3 +1,18 @@
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.title-row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title-row > * {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .search-field {
   height: 42px !important;
 }

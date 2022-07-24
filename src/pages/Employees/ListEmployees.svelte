@@ -1,13 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { navigate } from 'svelte-routing';
 
-  import DataTable, { Head, Body, Row, Cell, Label, SortValue } from '@smui/data-table';
+  import Button, { Label as ButtonLabel } from '@smui/button';
+  import DataTable, { Head, Body, Row, Cell, Label as CellLabel, SortValue } from '@smui/data-table';
   import LinearProgress from '@smui/linear-progress';
   import IconButton from '@smui/icon-button';
-  import SearchField from '../components/SearchField.svelte';
+  import SearchField from '../../components/SearchField.svelte';
   
-  import type { Employee } from '../models/employee';
-  import employeesService from '../services/employees-service';
+  import type { Employee } from '../../models/employee';
+  import employeesService from '../../services/employees-service';
 
   let didLoad = false;
   let errorMessage: string = null;
@@ -38,6 +40,10 @@
       return sortDirection === SortValue.ASCENDING ? compareValue : -compareValue;
     });
   }
+
+  function addEmployee() {
+    navigate('/employees/add');
+  }
 </script>
 
 <div class="title-row">
@@ -49,8 +55,13 @@
 </div>
 
 {#if errorMessage}
-<div>{errorMessage}</div>
+<div class="error">{errorMessage}</div>
 {:else}
+{#if didLoad}
+<Button on:click={addEmployee}>
+  <ButtonLabel>Add Employee</ButtonLabel>
+</Button>
+{/if}
 <DataTable
   sortable
   bind:sort={sortProperty}
@@ -60,15 +71,15 @@
   <Head>
     <Row>
       <Cell columnId="lastName">
-        <Label>Last name</Label>
+        <CellLabel>Last name</CellLabel>
         <IconButton class="material-icons">arrow_upward</IconButton>
       </Cell>
       <Cell columnId="firstName">
-        <Label>First name</Label>
+        <CellLabel>First name</CellLabel>
         <IconButton class="material-icons">arrow_upward</IconButton>
       </Cell>
       <Cell columnId="title">
-        <Label>Title</Label>
+        <CellLabel>Title</CellLabel>
         <IconButton class="material-icons">arrow_upward</IconButton>
       </Cell>
     </Row>
@@ -90,13 +101,6 @@
 <style>
   .title-row {
     display: flex;
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
-  .title-row > * {
-    margin-top: auto;
-    margin-bottom: auto;
   }
 
   .title {
