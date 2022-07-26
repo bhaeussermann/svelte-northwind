@@ -3,12 +3,12 @@
   import { navigate } from 'svelte-routing';
 
   import type { SnackbarComponentDev } from '@smui/snackbar';
-  import Snackbar, { Label as SnackbarLabel, Actions } from '@smui/snackbar';
   import Button, { Label as ButtonLabel } from '@smui/button';
   import DataTable, { Head, Body, Row, Cell, Label as CellLabel, SortValue } from '@smui/data-table';
   import LinearProgress from '@smui/linear-progress';
   import IconButton from '@smui/icon-button';
   import SearchField from '../../components/SearchField.svelte';
+  import ErrorBar from '../../components/ErrorBar.svelte';
   
   import type { Employee } from '../../models/employee';
   import employeesService from '../../services/employees-service';
@@ -114,12 +114,7 @@
   <LinearProgress indeterminate bind:closed={isNotLoading} slot="progress" />
 </DataTable>
 
-<Snackbar bind:this={errorSnackbar} class="error">
-  <SnackbarLabel>{errorMessage}</SnackbarLabel>
-  <Actions>
-    <IconButton class="material-icons" title="Dismiss">close</IconButton>
-  </Actions>
-</Snackbar>
+<ErrorBar bind:snackbarComponent={errorSnackbar} {errorMessage} />
 
 <style>
   .title-row {

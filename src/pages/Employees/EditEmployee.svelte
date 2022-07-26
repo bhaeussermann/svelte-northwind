@@ -3,12 +3,12 @@
   import { navigate } from 'svelte-routing';
 
   import type { SnackbarComponentDev } from '@smui/snackbar';
-  import Snackbar, { Label as SnackbarLabel, Actions } from '@smui/snackbar';
   import IconButton from '@smui/icon-button';
   import Textfield from '@smui/textfield';
   import Button, { Label } from '@smui/button';
   import ProgressIndicator from '../../components/ProgressIndicator.svelte';
   import InlineProgressIndicator from '../../components/InlineProgressIndicator.svelte';
+  import ErrorBar from '../../components/ErrorBar.svelte';
 
   import type { Employee } from '../../models/employee';
   import employeesService from '../../services/employees-service';
@@ -114,12 +114,7 @@
 </form>
 {/if}
 
-<Snackbar bind:this={errorSnackbar} class="error">
-  <SnackbarLabel>{errorMessage}</SnackbarLabel>
-  <Actions>
-    <IconButton class="material-icons" title="Dismiss">close</IconButton>
-  </Actions>
-</Snackbar>
+<ErrorBar bind:snackbarComponent={errorSnackbar} {errorMessage} />
 
 <style>
   .button-container {
