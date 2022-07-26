@@ -44,6 +44,10 @@
   function addEmployee() {
     navigate('/employees/add');
   }
+
+  function editEmployee(employeeId: string) {
+    navigate('employees/' + employeeId);
+  }
 </script>
 
 <div class="title-row">
@@ -82,6 +86,7 @@
         <CellLabel>Title</CellLabel>
         <IconButton class="material-icons">arrow_upward</IconButton>
       </Cell>
+      <Cell />
     </Row>
   </Head>
   <Body>
@@ -90,6 +95,11 @@
       <Cell>{employee.lastName}</Cell>
       <Cell>{employee.firstName}</Cell>
       <Cell>{employee.title}</Cell>
+      <Cell>
+        <Button on:click={() => editEmployee(employee.id)}>
+          <ButtonLabel>Edit</ButtonLabel>
+        </Button>
+      </Cell>
     </Row>
     {/each}
   </Body>

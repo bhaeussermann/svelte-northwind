@@ -2,14 +2,27 @@ import type { Employee } from '../models/employee';
 
 class EmployeesService {
   async getAll(): Promise<Employee[]> {
-    return this.callApi('/employees', 'GET');
+    return this.callApiGetResponse('/employees', 'GET');
+  }
+
+  async get(employeeId: string): Promise<Employee> {
+    return this.callApiGetResponse('/employees/' + employeeId, 'GET');
   }
 
   async add(employee: Employee): Promise<void> {
-    return this.callApi('/employees', 'POST', employee);
+    await this.callApi('/employees', 'POST', employee);
   }
 
-  private async callApi<T>(path: string, method: string, body: any = null): Promise<T> {
+  async update(employee: Employee): Promise<void> {
+    await this.callApi('/employees/' + employee.id, 'PUT', employee);
+  }
+
+  private async callApiGetResponse<T>(path: string, method: string, body: any = null): Promise<T> {
+    const response = await this.callApi(path, method, body);
+    return await response.json() as T;
+  }
+
+  private async callApi(path: string, method: string, body: any = null): Promise<Response> {
     const response = await fetch(
       '/api' + path,
       {
@@ -21,7 +34,7 @@ class EmployeesService {
       const errorResponse = await response.json() as ErrorResponse;
       throw new Error(errorResponse.message ?? response.statusText);
     }
-    return await response.json() as T;
+    return response;
   }
 }
 

@@ -11,5 +11,8 @@
 <Router {url}>
   <Route path="/" component={ListEmployees} />
   <Route path="/add" component={EditEmployee} />
+  <Route path="/:id" let:params>
+    <EditEmployee employeeId={params.id} />
+  </Route>
   <Route component={NotFound} />
 </Router>
