@@ -1,6 +1,5 @@
-.error {
-  color: red;
-  font-weight: bold;
+.mdc-snackbar.error > .mdc-snackbar__surface {
+  background-color: #dd0000;
 }
 
 .title-row {

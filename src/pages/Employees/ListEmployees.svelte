@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
 
+  import type { SnackbarComponentDev } from '@smui/snackbar';
+  import Snackbar, { Label as SnackbarLabel, Actions } from '@smui/snackbar';
   import Button, { Label as ButtonLabel } from '@smui/button';
   import DataTable, { Head, Body, Row, Cell, Label as CellLabel, SortValue } from '@smui/data-table';
   import LinearProgress from '@smui/linear-progress';
@@ -11,8 +13,12 @@
   import type { Employee } from '../../models/employee';
   import employeesService from '../../services/employees-service';
 
+  let isLoading = true;
+  $: isNotLoading = !isLoading;
   let didLoad = false;
   let errorMessage: string = null;
+  let errorSnackbar: SnackbarComponentDev;
+
   let employees: Employee[] = [];
   let displayedEmployees: Employee[] = [];
   let sortProperty: keyof Employee = 'lastName';
@@ -20,12 +26,16 @@
   let filterText = '';
 
   onMount(async () => {
+    isLoading = true;
     try {
       employees = await employeesService.getAll();
       refreshDisplayedEmployees();
       didLoad = true;
     } catch (error) {
       errorMessage = 'Error retrieving employees: ' + error.message;
+      errorSnackbar.open();
+    } finally {
+      isLoading = false;
     }
   });
 
@@ -58,9 +68,6 @@
   {/if}
 </div>
 
-{#if errorMessage}
-<div class="error">{errorMessage}</div>
-{:else}
 {#if didLoad}
 <Button on:click={addEmployee}>
   <ButtonLabel>Add Employee</ButtonLabel>
@@ -104,9 +111,15 @@
     {/each}
   </Body>
 
-  <LinearProgress indeterminate bind:closed={didLoad} slot="progress" />
+  <LinearProgress indeterminate bind:closed={isNotLoading} slot="progress" />
 </DataTable>
-{/if}
+
+<Snackbar bind:this={errorSnackbar} class="error">
+  <SnackbarLabel>{errorMessage}</SnackbarLabel>
+  <Actions>
+    <IconButton class="material-icons" title="Dismiss">close</IconButton>
+  </Actions>
+</Snackbar>
 
 <style>
   .title-row {
