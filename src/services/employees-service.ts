@@ -17,6 +17,10 @@ class EmployeesService {
     await this.callApi('/employees/' + employee.id, 'PUT', employee);
   }
 
+  async delete(employeeId: string): Promise<void> {
+    await this.callApi('employees/' + employeeId, 'DELETE');
+  }
+
   private async callApiGetResponse<T>(path: string, method: string, body: any = null): Promise<T> {
     const response = await this.callApi(path, method, body);
     return await response.json() as T;

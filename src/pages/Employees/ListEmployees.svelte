@@ -3,6 +3,8 @@
   import { navigate } from 'svelte-routing';
 
   import ErrorBar from '../../components/ErrorBar.svelte';
+  import ConfirmationDialog from '../../components/ConfirmationDialog.svelte';
+  import InlineProgressIndicator from '../../components/InlineProgressIndicator.svelte';
   import Button, { Label as ButtonLabel } from '@smui/button';
   import DataTable, { Head, Body, Row, Cell, Label as CellLabel, SortValue } from '@smui/data-table';
   import LinearProgress from '@smui/linear-progress';
@@ -11,11 +13,14 @@
   
   import type { Employee } from '../../models/employee';
   import employeesService from '../../services/employees-service';
+  
+  let errorBar: ErrorBar;
+  let confirmationDialog: ConfirmationDialog;
 
   let isLoading = true;
   $: isNotLoading = !isLoading;
   let didLoad = false;
-  let errorBar: ErrorBar;
+  let deletedEmployeeId: string = null;
 
   let employees: Employee[] = [];
   let displayedEmployees: Employee[] = [];
@@ -23,7 +28,9 @@
   let sortDirection: SortValue = SortValue.ASCENDING;
   let filterText = '';
 
-  onMount(async () => {
+  onMount(loadEmployees);
+
+  async function loadEmployees() {
     isLoading = true;
     try {
       employees = await employeesService.getAll();
@@ -34,7 +41,7 @@
     } finally {
       isLoading = false;
     }
-  });
+  }
 
   function refreshDisplayedEmployees() {
     displayedEmployees = employees.filter(e =>
@@ -54,6 +61,23 @@
 
   function editEmployee(employeeId: string) {
     navigate('employees/' + employeeId);
+  }
+
+  async function confirmDeleteEmployee(employee: Employee) {
+    const result = await confirmationDialog.confirm('Delete employee', `Delete employee ${employee.firstName} ${employee.lastName}?`);
+    if (result) {
+      try {
+        deletedEmployeeId = employee.id;
+        await employeesService.delete(employee.id);
+      } catch (error) {
+        errorBar.show('Error deleting employee: ' + error.message);
+        return;
+      } finally {
+        deletedEmployeeId = null;
+      }
+
+      loadEmployees();
+    }
   }
 </script>
 
@@ -103,6 +127,12 @@
         <Button on:click={() => editEmployee(employee.id)}>
           <ButtonLabel>Edit</ButtonLabel>
         </Button>
+        <Button on:click={() => confirmDeleteEmployee(employee)}>
+          <ButtonLabel>Delete</ButtonLabel>
+        </Button>
+        {#if employee.id === deletedEmployeeId}
+        <InlineProgressIndicator topOffset={10} />
+        {/if}
       </Cell>
     </Row>
     {/each}
@@ -112,6 +142,8 @@
 </DataTable>
 
 <ErrorBar bind:this={errorBar} />
+
+<ConfirmationDialog bind:this={confirmationDialog} />
 
 <style>
   .title-row {
