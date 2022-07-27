@@ -3,8 +3,13 @@
   import Snackbar, { Label as SnackbarLabel, Actions } from '@smui/snackbar';
   import IconButton from '@smui/icon-button';
 
-  export let snackbarComponent: SnackbarComponentDev;
-  export let errorMessage = '';
+  let snackbarComponent: SnackbarComponentDev;
+  let errorMessage = '';
+
+  export function show(errorText: string) {
+    errorMessage = errorText;
+    snackbarComponent.open();
+  }
 </script>
 
 <Snackbar bind:this={snackbarComponent} class="error">

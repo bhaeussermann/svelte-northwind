@@ -2,13 +2,12 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
 
-  import type { SnackbarComponentDev } from '@smui/snackbar';
+  import ErrorBar from '../../components/ErrorBar.svelte';
   import Button, { Label as ButtonLabel } from '@smui/button';
   import DataTable, { Head, Body, Row, Cell, Label as CellLabel, SortValue } from '@smui/data-table';
   import LinearProgress from '@smui/linear-progress';
   import IconButton from '@smui/icon-button';
   import SearchField from '../../components/SearchField.svelte';
-  import ErrorBar from '../../components/ErrorBar.svelte';
   
   import type { Employee } from '../../models/employee';
   import employeesService from '../../services/employees-service';
@@ -16,8 +15,7 @@
   let isLoading = true;
   $: isNotLoading = !isLoading;
   let didLoad = false;
-  let errorMessage: string = null;
-  let errorSnackbar: SnackbarComponentDev;
+  let errorBar: ErrorBar;
 
   let employees: Employee[] = [];
   let displayedEmployees: Employee[] = [];
@@ -32,8 +30,7 @@
       refreshDisplayedEmployees();
       didLoad = true;
     } catch (error) {
-      errorMessage = 'Error retrieving employees: ' + error.message;
-      errorSnackbar.open();
+      errorBar.show('Error retrieving employees: ' + error.message);
     } finally {
       isLoading = false;
     }
@@ -114,7 +111,7 @@
   <LinearProgress indeterminate bind:closed={isNotLoading} slot="progress" />
 </DataTable>
 
-<ErrorBar bind:snackbarComponent={errorSnackbar} {errorMessage} />
+<ErrorBar bind:this={errorBar} />
 
 <style>
   .title-row {

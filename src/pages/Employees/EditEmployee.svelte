@@ -2,8 +2,6 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
 
-  import type { SnackbarComponentDev } from '@smui/snackbar';
-  import IconButton from '@smui/icon-button';
   import Textfield from '@smui/textfield';
   import Button, { Label } from '@smui/button';
   import ProgressIndicator from '../../components/ProgressIndicator.svelte';
@@ -18,8 +16,7 @@
   let isLoading = false;
   let didLoad = false;
   let isSaving = false;
-  let errorMessage: string = null;
-  let errorSnackbar: SnackbarComponentDev;
+  let errorBar: ErrorBar;
 
   let employee: Employee = {
     id: null,
@@ -41,7 +38,7 @@
         didLoad = true;
       }
       catch (error) {
-        showError('Error loading employee: ' + error.message);
+        errorBar.show('Error loading employee: ' + error.message);
       }
       finally {
         isLoading = false;
@@ -51,7 +48,6 @@
 
   async function save() {
     isSaving = true;
-    errorMessage = null;
     try {
       if (isEditing) {
         await employeesService.update(employee);
@@ -61,7 +57,7 @@
       navigate('/employees');
     }
     catch (error) {
-      showError('Error saving employee: ' + error.message);
+      errorBar.show('Error saving employee: ' + error.message);
     }
     finally {
       isSaving = false;
@@ -70,11 +66,6 @@
 
   function cancel() {
     navigate('/employees');
-  }
-
-  function showError(errorText: string) {
-    errorMessage = errorText;
-    errorSnackbar.open();
   }
 </script>
 
@@ -114,7 +105,7 @@
 </form>
 {/if}
 
-<ErrorBar bind:snackbarComponent={errorSnackbar} {errorMessage} />
+<ErrorBar bind:this={errorBar} />
 
 <style>
   .button-container {
