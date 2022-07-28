@@ -1,6 +1,6 @@
 # Northwind
 
-This is a simple CRUD application for managing the Employees in a standard Northwind database.
+This is a simple CRUD application for managing the Employees in a standard Northwind database. It is hosted [here](https://svelte-northwind.herokuapp.com) as quick preview.
 
 The application interfaces with a [REST service hosted via Express in Node.js](https://github.com/bhaeussermann/northwind-api).
 
