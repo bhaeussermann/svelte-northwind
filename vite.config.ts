@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://northwind-express-api.herokuapp.com',
+        target: 'https://northwind-api.onrender.com',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '')
       }

@@ -16,7 +16,7 @@ const currentFolderPath = path.dirname(fileURLToPath(import.meta.url));
 app.use('/', express.static(path.join(currentFolderPath, 'dist')));
 
 app.all('/api/*', function(req, res) {
-  request('https://northwind-express-api.herokuapp.com' + req.url.substring(4),
+  request('https://northwind-api.onrender.com' + req.url.substring(4),
     {
       method: req.method,
       body: (req.method === 'POST' || req.method === 'PUT') ? JSON.stringify(req.body) : null,
